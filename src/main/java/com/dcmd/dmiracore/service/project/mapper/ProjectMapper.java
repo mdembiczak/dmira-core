@@ -18,6 +18,7 @@ public class ProjectMapper {
         Set<String> tasks = mapTasksToTaskNames(project);
 
         return ProjectResponse.Builder.builder()
+                .id(project.getId())
                 .name(project.getName())
                 .tag(project.getTag())
                 .createdBy(project.getCreatedBy().getUsername())

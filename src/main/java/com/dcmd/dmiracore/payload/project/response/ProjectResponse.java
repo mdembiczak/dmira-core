@@ -3,6 +3,7 @@ package com.dcmd.dmiracore.payload.project.response;
 import java.util.Set;
 
 public class ProjectResponse {
+    private String id;
     private String name;
     private String tag;
     private String createdBy;
@@ -11,6 +12,10 @@ public class ProjectResponse {
     private String modifyDate;
     private Set<String> tasks;
     private Set<String> assignedUsers;
+
+    public String getId() {
+        return id;
+    }
 
     public String getName() {
         return name;
@@ -46,6 +51,7 @@ public class ProjectResponse {
 
 
     public static final class Builder {
+        private String id;
         private String name;
         private String tag;
         private String createdBy;
@@ -60,6 +66,11 @@ public class ProjectResponse {
 
         public static Builder builder() {
             return new Builder();
+        }
+
+        public Builder id(String id) {
+            this.id = id;
+            return this;
         }
 
         public Builder name(String name) {
@@ -104,6 +115,7 @@ public class ProjectResponse {
 
         public ProjectResponse build() {
             ProjectResponse projectResponse = new ProjectResponse();
+            projectResponse.id = this.id;
             projectResponse.createdBy = this.createdBy;
             projectResponse.modifiedBy = this.modifiedBy;
             projectResponse.modifyDate = this.modifyDate;

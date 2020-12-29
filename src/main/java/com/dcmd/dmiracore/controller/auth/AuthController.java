@@ -3,6 +3,7 @@ package com.dcmd.dmiracore.controller.auth;
 import com.dcmd.dmiracore.payload.auth.request.LoginRequest;
 import com.dcmd.dmiracore.payload.auth.request.SignupRequest;
 import com.dcmd.dmiracore.service.auth.AuthService;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,11 +19,13 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @Hidden
     @RequestMapping(path = "/signin", method = RequestMethod.POST)
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         return authService.loginUser(loginRequest);
     }
 
+    @Hidden
     @RequestMapping(path = "/signup", method = RequestMethod.POST)
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest) {
         return authService.registerUser(signupRequest);

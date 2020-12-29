@@ -62,13 +62,13 @@ public class AuthService {
         if (userRepository.existsByUsername(signupRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken."));
+                    .body(new MessageResponse("Error: Username is already taken.", 400));
         }
 
         if (userRepository.existsByEmail(signupRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Email is already use."));
+                    .body(new MessageResponse("Error: Email is already use.", 400));
         }
         User user = new User(signupRequest.getUsername(), signupRequest.getEmail(),
                 passwordEncoder.encode(signupRequest.getPassword()));
@@ -108,6 +108,6 @@ public class AuthService {
                 .build();
         userRepository.save(userWithRoles);
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully."));
+        return ResponseEntity.ok(new MessageResponse("User registered successfully.", 201));
     }
 }

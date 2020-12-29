@@ -6,6 +6,7 @@ import com.dcmd.dmiracore.model.User;
 import com.dcmd.dmiracore.payload.project.request.ProjectCreationRequest;
 import com.dcmd.dmiracore.payload.project.request.ProjectUpdateRequest;
 import com.dcmd.dmiracore.payload.project.response.ProjectResponse;
+import com.dcmd.dmiracore.payload.response.ErrorMessageResponse;
 import com.dcmd.dmiracore.payload.response.MessageResponse;
 import com.dcmd.dmiracore.repository.ProjectRepository;
 import com.dcmd.dmiracore.repository.TaskRepository;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -34,7 +36,7 @@ public class ProjectService {
     @Autowired
     ProjectMapper projectMapper;
 
-    public ResponseEntity<MessageResponse> createProject(ProjectCreationRequest request) {
+    public ResponseEntity<?> createProject(ProjectCreationRequest request) {
         if (projectRepository.existsProjectsByName(request.getName())) {
             return buildErrorResponse("Error: Project with given name exists");
         }
@@ -46,8 +48,12 @@ public class ProjectService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Project project = new Project(request.getName(), request.getTag(), user);
         projectRepository.save(project);
+        ProjectResponse projectResponse = projectMapper.mapEntityToResponse(projectRepository
+                .findProjectByName(project.getName()).orElseThrow(() -> new RuntimeException("Project not found.")));
 
-        return ResponseEntity.ok(new MessageResponse("Project was successfully added"));
+        return ResponseEntity
+                .status(201)
+                .body(projectResponse);
     }
 
     public Set<ProjectResponse> getAllProjects() {
@@ -57,37 +63,42 @@ public class ProjectService {
                 .collect(Collectors.toSet());
     }
 
-    public ProjectResponse getProjectByName(String name) {
-        Project project = projectRepository.findProjectByName(name)
-                .orElseThrow(() -> new RuntimeException(String.format("Project with name %s not found", name)));
+    public ResponseEntity<?> getProjectByName(String name) {
+        Optional<Project> project = projectRepository.findProjectByName(name);
+        if (project.isEmpty()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ErrorMessageResponse(String.format("Project with name %s not found", name), 400));
+        }
 
-        return projectMapper.mapEntityToResponse(project);
+        return ResponseEntity
+                .ok()
+                .body(projectMapper.mapEntityToResponse(project.get()));
     }
 
-    private ResponseEntity<MessageResponse> buildErrorResponse(String message) {
+    private ResponseEntity<ErrorMessageResponse> buildErrorResponse(String message) {
         return ResponseEntity
                 .badRequest()
-                .body(new MessageResponse(message));
+                .body(new ErrorMessageResponse(message, 400));
     }
 
     public ResponseEntity<?> updateProject(ProjectUpdateRequest request) {
-        Project project = projectRepository.findProjectByName(request.getName())
-                .orElseThrow(() -> new RuntimeException("Project not found"));
-
-        if (!projectRepository.existsProjectsByName(request.getName())) {
-            return buildErrorResponse("Error: Project with given name exists");
+        Optional<Project> project = projectRepository.findProjectByName(request.getName());
+        if (project.isEmpty()) {
+            return buildErrorResponse("Project not found");
         }
+
         if (!projectRepository.existsProjectsByTag(request.getTag())) {
-            return buildErrorResponse("Error: Project with given tag exists");
+            return buildErrorResponse("Project with given tag exists");
         }
 
         User user = userRepository.findUserByUsername(request.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Set<Task> tasks = taskRepository.findTasksByNameIn(request.getTasks());
-        Set<User> assignedUsers = updateAssignedUsers(request, project);
+        Set<User> assignedUsers = updateAssignedUsers(request, project.get());
 
-        Project updatedProject = Project.Builder.from(project)
+        Project updatedProject = Project.Builder.from(project.get())
                 .name(request.getName())
                 .tag(request.getTag())
                 .modifiedBy(user)
@@ -114,6 +125,6 @@ public class ProjectService {
 
         taskRepository.deleteAll(project.getTasks());
         projectRepository.delete(project);
-        return new MessageResponse(String.format("Project wih name %s is successful removed", name));
+        return new MessageResponse(String.format("Project wih name %s is successful removed", name), 201);
     }
 }
