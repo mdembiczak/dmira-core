@@ -3,16 +3,15 @@ package com.dcmd.dmiracore.service.project;
 import com.dcmd.dmiracore.model.Project;
 import com.dcmd.dmiracore.model.Task;
 import com.dcmd.dmiracore.model.User;
-import com.dcmd.dmiracore.payload.project.request.ProjectCreationRequest;
-import com.dcmd.dmiracore.payload.project.request.ProjectUpdateRequest;
-import com.dcmd.dmiracore.payload.project.response.ProjectResponse;
-import com.dcmd.dmiracore.payload.response.ErrorMessageResponse;
-import com.dcmd.dmiracore.payload.response.MessageResponse;
+import com.dcmd.dmiracore.payload.messages.ErrorMessageResponse;
+import com.dcmd.dmiracore.payload.messages.MessageResponse;
+import com.dcmd.dmiracore.payload.project.ProjectCreationRequest;
+import com.dcmd.dmiracore.payload.project.ProjectResponse;
+import com.dcmd.dmiracore.payload.project.ProjectUpdateRequest;
 import com.dcmd.dmiracore.repository.ProjectRepository;
 import com.dcmd.dmiracore.repository.TaskRepository;
 import com.dcmd.dmiracore.repository.UserRepository;
 import com.dcmd.dmiracore.service.project.mapper.ProjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -24,17 +23,20 @@ import java.util.stream.Collectors;
 @Service
 public class ProjectService {
 
-    @Autowired
-    ProjectRepository projectRepository;
+    final ProjectRepository projectRepository;
 
-    @Autowired
-    TaskRepository taskRepository;
+    final TaskRepository taskRepository;
 
-    @Autowired
-    UserRepository userRepository;
+    final UserRepository userRepository;
 
-    @Autowired
-    ProjectMapper projectMapper;
+    final ProjectMapper projectMapper;
+
+    public ProjectService(ProjectRepository projectRepository, TaskRepository taskRepository, UserRepository userRepository, ProjectMapper projectMapper) {
+        this.projectRepository = projectRepository;
+        this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
+        this.projectMapper = projectMapper;
+    }
 
     public ResponseEntity<?> createProject(ProjectCreationRequest request) {
         if (projectRepository.existsProjectsByName(request.getName())) {
@@ -59,7 +61,7 @@ public class ProjectService {
     public Set<ProjectResponse> getAllProjects() {
         List<Project> projects = projectRepository.findAll();
         return projects.stream()
-                .map(project -> projectMapper.mapEntityToResponse(project))
+                .map(projectMapper::mapEntityToResponse)
                 .collect(Collectors.toSet());
     }
 

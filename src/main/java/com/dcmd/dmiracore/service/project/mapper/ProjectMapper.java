@@ -3,7 +3,7 @@ package com.dcmd.dmiracore.service.project.mapper;
 import com.dcmd.dmiracore.model.Project;
 import com.dcmd.dmiracore.model.Task;
 import com.dcmd.dmiracore.model.User;
-import com.dcmd.dmiracore.payload.project.response.ProjectResponse;
+import com.dcmd.dmiracore.payload.project.ProjectResponse;
 import org.springframework.stereotype.Component;
 
 import java.time.format.DateTimeFormatter;

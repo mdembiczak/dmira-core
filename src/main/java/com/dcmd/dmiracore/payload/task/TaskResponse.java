@@ -1,17 +1,15 @@
-package com.dcmd.dmiracore.payload.project.response;
+package com.dcmd.dmiracore.payload.task;
 
-import java.util.Set;
-
-public class ProjectResponse {
+public class TaskResponse {
     private String id;
     private String name;
-    private String tag;
+    private String description;
+    private String projectName;
     private String createdBy;
     private String createDate;
     private String modifiedBy;
     private String modifyDate;
-    private Set<String> tasks;
-    private Set<String> assignedUsers;
+    private String assignedTo;
 
     public String getId() {
         return id;
@@ -21,8 +19,12 @@ public class ProjectResponse {
         return name;
     }
 
-    public String getTag() {
-        return tag;
+    public String getDescription() {
+        return description;
+    }
+
+    public String getProjectName() {
+        return projectName;
     }
 
     public String getCreatedBy() {
@@ -41,25 +43,21 @@ public class ProjectResponse {
         return modifyDate;
     }
 
-    public Set<String> getTasks() {
-        return tasks;
-    }
-
-    public Set<String> getAssignedUsers() {
-        return assignedUsers;
+    public String getAssignedTo() {
+        return assignedTo;
     }
 
 
     public static final class Builder {
         private String id;
         private String name;
-        private String tag;
+        private String description;
+        private String projectName;
         private String createdBy;
         private String createDate;
         private String modifiedBy;
         private String modifyDate;
-        private Set<String> tasks;
-        private Set<String> assignedUsers;
+        private String assignedTo;
 
         private Builder() {
         }
@@ -78,8 +76,13 @@ public class ProjectResponse {
             return this;
         }
 
-        public Builder tag(String tag) {
-            this.tag = tag;
+        public Builder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder projectName(String projectName) {
+            this.projectName = projectName;
             return this;
         }
 
@@ -103,28 +106,23 @@ public class ProjectResponse {
             return this;
         }
 
-        public Builder tasks(Set<String> tasks) {
-            this.tasks = tasks;
+        public Builder assignedTo(String assignedTo) {
+            this.assignedTo = assignedTo;
             return this;
         }
 
-        public Builder assignedUsers(Set<String> assignedUsers) {
-            this.assignedUsers = assignedUsers;
-            return this;
-        }
-
-        public ProjectResponse build() {
-            ProjectResponse projectResponse = new ProjectResponse();
-            projectResponse.id = this.id;
-            projectResponse.createdBy = this.createdBy;
-            projectResponse.modifiedBy = this.modifiedBy;
-            projectResponse.modifyDate = this.modifyDate;
-            projectResponse.tasks = this.tasks;
-            projectResponse.name = this.name;
-            projectResponse.assignedUsers = this.assignedUsers;
-            projectResponse.createDate = this.createDate;
-            projectResponse.tag = this.tag;
-            return projectResponse;
+        public TaskResponse build() {
+            TaskResponse taskResponse = new TaskResponse();
+            taskResponse.description = this.description;
+            taskResponse.projectName = this.projectName;
+            taskResponse.modifiedBy = this.modifiedBy;
+            taskResponse.createdBy = this.createdBy;
+            taskResponse.modifyDate = this.modifyDate;
+            taskResponse.name = this.name;
+            taskResponse.id = this.id;
+            taskResponse.createDate = this.createDate;
+            taskResponse.assignedTo = this.assignedTo;
+            return taskResponse;
         }
     }
 }

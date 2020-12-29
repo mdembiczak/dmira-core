@@ -1,4 +1,4 @@
-package com.dcmd.dmiracore.payload.auth.request;
+package com.dcmd.dmiracore.payload.auth;
 
 import javax.validation.constraints.NotBlank;
 

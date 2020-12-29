@@ -1,4 +1,4 @@
-package com.dcmd.dmiracore.payload.auth.response;
+package com.dcmd.dmiracore.payload.auth;
 
 import java.util.List;
 

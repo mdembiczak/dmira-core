@@ -1,4 +1,4 @@
-package com.dcmd.dmiracore.payload.project.request;
+package com.dcmd.dmiracore.payload.project;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;

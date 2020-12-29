@@ -1,4 +1,4 @@
-package com.dcmd.dmiracore.payload.response;
+package com.dcmd.dmiracore.payload.messages;
 
 public abstract class GenericMessage {
     private String message;

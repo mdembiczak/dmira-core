@@ -1,7 +1,7 @@
 package com.dcmd.dmiracore.controller.auth;
 
-import com.dcmd.dmiracore.payload.auth.request.LoginRequest;
-import com.dcmd.dmiracore.payload.auth.request.SignupRequest;
+import com.dcmd.dmiracore.payload.auth.LoginRequest;
+import com.dcmd.dmiracore.payload.auth.SignupRequest;
 import com.dcmd.dmiracore.service.auth.AuthService;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.http.ResponseEntity;

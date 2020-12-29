@@ -1,29 +1,31 @@
-package com.dcmd.dmiracore.payload.project.request;
+package com.dcmd.dmiracore.payload.task;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-public class ProjectCreationRequest {
+public class TaskUpdateRequest {
     @NotBlank
-    @Size(max = 30)
+    @Size(min = 3, max = 40)
     private String name;
     @NotBlank
-    @Size(max = 6)
-    private String tag;
+    private String description;
     @NotBlank
-    @Size(max = 20)
     private String username;
+    private String assignedTo;
 
     public String getName() {
         return name;
     }
 
-    public String getTag() {
-        return tag;
+    public String getDescription() {
+        return description;
     }
 
     public String getUsername() {
         return username;
     }
+
+    public String getAssignedTo() {
+        return assignedTo;
+    }
 }
- 

@@ -1,10 +1,10 @@
 package com.dcmd.dmiracore.controller.project;
 
-import com.dcmd.dmiracore.payload.project.request.ProjectCreationRequest;
-import com.dcmd.dmiracore.payload.project.request.ProjectUpdateRequest;
-import com.dcmd.dmiracore.payload.project.response.ProjectResponse;
-import com.dcmd.dmiracore.payload.response.ErrorMessageResponse;
-import com.dcmd.dmiracore.payload.response.MessageResponse;
+import com.dcmd.dmiracore.payload.messages.ErrorMessageResponse;
+import com.dcmd.dmiracore.payload.messages.MessageResponse;
+import com.dcmd.dmiracore.payload.project.ProjectCreationRequest;
+import com.dcmd.dmiracore.payload.project.ProjectResponse;
+import com.dcmd.dmiracore.payload.project.ProjectUpdateRequest;
 import com.dcmd.dmiracore.service.project.ProjectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
