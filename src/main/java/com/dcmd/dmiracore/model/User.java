@@ -8,12 +8,11 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Document(collection = "users")
 public class User {
-    @DBRef
-    private Set<Role> roles = new HashSet<>();
     @Id
     private String id;
     @NotBlank
@@ -26,6 +25,8 @@ public class User {
     @NotBlank
     @Size(max = 120)
     private String password;
+    @DBRef
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
@@ -56,6 +57,18 @@ public class User {
         return roles;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return username.equals(user.username) && email.equals(user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, email);
+    }
 
     public static final class Builder {
         private Set<Role> roles = new HashSet<>();
@@ -77,7 +90,7 @@ public class User {
             return new Builder(user);
         }
 
-        public static Builder user() {
+        public static Builder builder() {
             return new Builder();
         }
 
