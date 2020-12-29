@@ -1,7 +1,0 @@
-spring:
-  data:
-    mongodb:
-#      host: '${MONGO_HOST:db}' # for container
-      host: 'localhost' # for IDE
-      port: 27017
-      database: '${MONGO_DB:dmira_db}'

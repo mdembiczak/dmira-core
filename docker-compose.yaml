@@ -1,26 +1,19 @@
 version: "3.8"
 
 services:
-  db:
+  mongodb:
     image: mongo:latest
-    container_name: dmira_db
+    container_name: dmira-db
     ports:
       - 27017:27017
     volumes:
       - ./data/db:/data/db
 
-  db-client:
-    image: mongoclient/mongoclient
-    ports:
-      - 3000:3000
-    depends_on:
-      - db
-
   app:
     build: .
     image: dmira-core-image
-    container_name: dmira-core-image
+    container_name: dmira-core
     ports:
       - 8080:8080
-    depends_on:
-      - db
+    links:
+      - mongodb
