@@ -1,13 +1,16 @@
 package com.dcmd.dmiracore.service.task;
 
 import com.dcmd.dmiracore.model.Project;
+import com.dcmd.dmiracore.model.State;
 import com.dcmd.dmiracore.model.Task;
 import com.dcmd.dmiracore.model.User;
+import com.dcmd.dmiracore.model.enums.EState;
 import com.dcmd.dmiracore.payload.messages.ErrorMessageResponse;
 import com.dcmd.dmiracore.payload.task.TaskCreationRequest;
 import com.dcmd.dmiracore.payload.task.TaskResponse;
 import com.dcmd.dmiracore.payload.task.TaskUpdateRequest;
 import com.dcmd.dmiracore.repository.ProjectRepository;
+import com.dcmd.dmiracore.repository.StateRepository;
 import com.dcmd.dmiracore.repository.TaskRepository;
 import com.dcmd.dmiracore.repository.UserRepository;
 import com.dcmd.dmiracore.service.task.mapper.TaskMapper;
@@ -32,6 +35,9 @@ public class TaskService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    StateRepository stateRepository;
 
     @Autowired
     TaskMapper taskMapper;
@@ -66,9 +72,19 @@ public class TaskService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Task task = new Task(request.getName(), request.getDescription(), user, validation.get(), user);
         taskRepository.save(task);
+        updateProject(validation.get(), task);
         TaskResponse taskResponse = taskMapper.mapEntityToResponse(task);
 
         return ResponseEntity.ok().body(taskResponse);
+    }
+
+    private void updateProject(Project project, Task task) {
+        Set<Task> tasks = project.getTasks();
+        tasks.add(task);
+        Project updatedProject = Project.Builder.from(project)
+                .tasks(tasks)
+                .build();
+        projectRepository.save(updatedProject);
     }
 
     public ResponseEntity<TaskResponse> updateTask(TaskUpdateRequest request) {
@@ -81,6 +97,13 @@ public class TaskService {
         Task.Builder taskBuilder = Task.Builder.from(task)
                 .description(request.getDescription())
                 .modifiedBy(user);
+
+
+        if (!request.getState().isBlank()) {
+            State state = stateRepository.findByState(EState.valueOf(request.getState()))
+                    .orElseThrow(() -> new RuntimeException("This state does not exists"));
+            taskBuilder.state(state.getState());
+        }
 
         if (!request.getAssignedTo().isBlank()) {
             User userToAssign = userRepository.findUserByUsername(request.getAssignedTo())

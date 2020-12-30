@@ -1,8 +1,8 @@
 package com.dcmd.dmiracore.service.auth;
 
-import com.dcmd.dmiracore.model.ERole;
 import com.dcmd.dmiracore.model.Role;
 import com.dcmd.dmiracore.model.User;
+import com.dcmd.dmiracore.model.enums.ERole;
 import com.dcmd.dmiracore.payload.auth.JwtResponse;
 import com.dcmd.dmiracore.payload.auth.LoginRequest;
 import com.dcmd.dmiracore.payload.auth.SignupRequest;

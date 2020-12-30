@@ -1,5 +1,6 @@
 package com.dcmd.dmiracore.model;
 
+import com.dcmd.dmiracore.model.enums.ERole;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 

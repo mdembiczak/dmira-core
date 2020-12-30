@@ -18,7 +18,8 @@ public class TaskMapper {
                 .createdBy(task.getCreatedBy().getUsername())
                 .createDate(task.getCreateDate().format(formatter))
                 .modifiedBy(task.getModifiedBy().getUsername())
-                .modifyDate(task.getModifyDate().format(formatter));
+                .modifyDate(task.getModifyDate().format(formatter))
+                .state(task.getState().name());
 
         if (task.getAssignedTo() != null) {
             builder.assignedTo(task.getAssignedTo().getUsername());

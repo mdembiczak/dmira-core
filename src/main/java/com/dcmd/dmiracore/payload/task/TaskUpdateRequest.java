@@ -11,6 +11,7 @@ public class TaskUpdateRequest {
     private String description;
     @NotBlank
     private String username;
+    private String state;
     private String assignedTo;
 
     public String getName() {
@@ -23,6 +24,10 @@ public class TaskUpdateRequest {
 
     public String getUsername() {
         return username;
+    }
+
+    public String getState() {
+        return state;
     }
 
     public String getAssignedTo() {

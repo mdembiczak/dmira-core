@@ -1,5 +1,6 @@
 package com.dcmd.dmiracore.model;
 
+import com.dcmd.dmiracore.model.enums.EState;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -30,6 +31,8 @@ public class Task {
     @NotBlank
     @Size(max = 20)
     private LocalDateTime modifyDate;
+    @NotBlank
+    private EState state;
     @DBRef
     private User assignedTo;
 
@@ -44,6 +47,7 @@ public class Task {
         this.modifiedBy = user;
         this.modifyDate = LocalDateTime.now();
         this.project = project;
+        this.state = EState.OPEN;
         this.assignedTo = assignedTo;
     }
 
@@ -80,6 +84,10 @@ public class Task {
         return modifyDate;
     }
 
+    public EState getState() {
+        return state;
+    }
+
     public User getAssignedTo() {
         return assignedTo;
     }
@@ -93,6 +101,7 @@ public class Task {
         private LocalDateTime createDate;
         private User modifiedBy;
         private LocalDateTime modifyDate;
+        private EState state;
         private User assignedTo;
 
         private Builder() {
@@ -107,6 +116,7 @@ public class Task {
             this.createDate = task.getCreateDate();
             this.modifiedBy = task.getModifiedBy();
             this.modifyDate = LocalDateTime.now();
+            this.state = task.getState();
             this.assignedTo = task.getAssignedTo();
         }
 
@@ -159,6 +169,11 @@ public class Task {
             return this;
         }
 
+        public Builder state(EState state) {
+            this.state = state;
+            return this;
+        }
+
         public Builder assignedTo(User assignedTo) {
             this.assignedTo = assignedTo;
             return this;
@@ -172,6 +187,7 @@ public class Task {
             task.modifiedBy = this.modifiedBy;
             task.createdBy = this.createdBy;
             task.createDate = this.createDate;
+            task.state = this.state;
             return task;
         }
     }

@@ -1,4 +1,4 @@
-package com.dcmd.dmiracore.model;
+package com.dcmd.dmiracore.model.enums;
 
 public enum ERole {
     ROLE_USER,

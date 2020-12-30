@@ -9,6 +9,7 @@ public class TaskResponse {
     private String createDate;
     private String modifiedBy;
     private String modifyDate;
+    private String state;
     private String assignedTo;
 
     public String getId() {
@@ -43,6 +44,10 @@ public class TaskResponse {
         return modifyDate;
     }
 
+    public String getState() {
+        return state;
+    }
+
     public String getAssignedTo() {
         return assignedTo;
     }
@@ -57,6 +62,7 @@ public class TaskResponse {
         private String createDate;
         private String modifiedBy;
         private String modifyDate;
+        private String state;
         private String assignedTo;
 
         private Builder() {
@@ -106,6 +112,11 @@ public class TaskResponse {
             return this;
         }
 
+        public Builder state(String state) {
+            this.state = state;
+            return this;
+        }
+
         public Builder assignedTo(String assignedTo) {
             this.assignedTo = assignedTo;
             return this;
@@ -121,6 +132,7 @@ public class TaskResponse {
             taskResponse.name = this.name;
             taskResponse.id = this.id;
             taskResponse.createDate = this.createDate;
+            taskResponse.state = this.state;
             taskResponse.assignedTo = this.assignedTo;
             return taskResponse;
         }
