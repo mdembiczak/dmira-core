@@ -43,9 +43,12 @@ public class TaskService {
     @Autowired
     TaskMapper taskMapper;
 
-    public ResponseEntity<Set<TaskResponse>> getAllTasks() {
+    public ResponseEntity<Set<TaskResponse>> getTaskAssignedToUser(String username) {
         List<Task> tasks = taskRepository.findAll();
-        Set<TaskResponse> taskResponses = tasks.stream()
+        Set<Task> tasksAssignedToUser = tasks.stream()
+                .filter(n -> n.getAssignedTo().getUsername().equals(username))
+                .collect(Collectors.toSet());
+        Set<TaskResponse> taskResponses = tasksAssignedToUser.stream()
                 .map(task -> taskMapper.mapEntityToResponse(task))
                 .collect(Collectors.toSet());
 
