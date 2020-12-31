@@ -38,9 +38,9 @@ public class TaskController {
         return taskService.getTaskByName(name);
     }
 
-    @GetMapping("project/{name}")
-    public ResponseEntity<?> getTaskByProjectName(@PathVariable String name) {
-        return taskService.getTaskByProject(name);
+    @GetMapping("project/{projectName}")
+    public ResponseEntity<?> getTaskByProjectName(@PathVariable String projectName) {
+        return taskService.getTaskByProject(projectName);
     }
 
 
