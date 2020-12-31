@@ -3,6 +3,7 @@ package com.dcmd.dmiracore.controller.task;
 import com.dcmd.dmiracore.payload.messages.ErrorMessageResponse;
 import com.dcmd.dmiracore.payload.task.TaskCreationRequest;
 import com.dcmd.dmiracore.payload.task.TaskResponse;
+import com.dcmd.dmiracore.payload.task.TaskStatusUpdateRequest;
 import com.dcmd.dmiracore.payload.task.TaskUpdateRequest;
 import com.dcmd.dmiracore.service.task.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,6 +37,11 @@ public class TaskController {
         return taskService.getTaskByName(name);
     }
 
+    @GetMapping("project/{name}")
+    public ResponseEntity<?> getTaskByProjectName(@PathVariable String name) {
+        return taskService.getTaskByProject(name);
+    }
+
 
     @Operation(summary = "Create task")
     @ApiResponses({
@@ -67,5 +73,10 @@ public class TaskController {
     @PutMapping
     public ResponseEntity<TaskResponse> createTask(@Valid @RequestBody TaskUpdateRequest request) {
         return taskService.updateTask(request);
+    }
+
+    @PutMapping("{name}")
+    public ResponseEntity<TaskResponse> updateTaskStatus(@Valid @RequestBody TaskStatusUpdateRequest request, @PathVariable String name) {
+        return taskService.updateTaskStatus(request, name);
     }
 }

@@ -8,6 +8,7 @@ import com.dcmd.dmiracore.model.enums.EState;
 import com.dcmd.dmiracore.payload.messages.ErrorMessageResponse;
 import com.dcmd.dmiracore.payload.task.TaskCreationRequest;
 import com.dcmd.dmiracore.payload.task.TaskResponse;
+import com.dcmd.dmiracore.payload.task.TaskStatusUpdateRequest;
 import com.dcmd.dmiracore.payload.task.TaskUpdateRequest;
 import com.dcmd.dmiracore.repository.ProjectRepository;
 import com.dcmd.dmiracore.repository.StateRepository;
@@ -48,6 +49,20 @@ public class TaskService {
                 .map(task -> taskMapper.mapEntityToResponse(task))
                 .collect(Collectors.toSet());
 
+        return ResponseEntity.ok(taskResponses);
+    }
+
+    public ResponseEntity<Set<TaskResponse>> getTaskByProject(String projectName) {
+        Project project = projectRepository.findProjectByName(projectName)
+                .orElseThrow(() -> new RuntimeException("Project not found"));
+
+        Set<String> taskNames = project.getTasks().stream()
+                .map(Task::getName)
+                .collect(Collectors.toSet());
+        Set<Task> tasksByNames = taskRepository.findTasksByNameIn(taskNames);
+        Set<TaskResponse> taskResponses = tasksByNames.stream()
+                .map(task -> taskMapper.mapEntityToResponse(task))
+                .collect(Collectors.toSet());
         return ResponseEntity.ok(taskResponses);
     }
 
@@ -113,6 +128,20 @@ public class TaskService {
 
         Task updatedTask = taskBuilder.build();
         taskRepository.save(updatedTask);
+        TaskResponse taskResponse = taskMapper.mapEntityToResponse(updatedTask);
+        return ResponseEntity.ok(taskResponse);
+    }
+
+    public ResponseEntity<TaskResponse> updateTaskStatus(TaskStatusUpdateRequest request, String name) {
+        Task task = taskRepository.findTasksByName(name)
+                .orElseThrow(() -> new RuntimeException(String.format("Task with name %s not found", name)));
+
+        User user = userRepository.findUserByUsername(request.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Task updatedTask = Task.Builder.from(task)
+                .state(EState.valueOf(name))
+                .build();
         TaskResponse taskResponse = taskMapper.mapEntityToResponse(updatedTask);
         return ResponseEntity.ok(taskResponse);
     }

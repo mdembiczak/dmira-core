@@ -11,7 +11,5 @@ public interface TaskRepository extends MongoRepository<Task, String> {
 
     Set<Task> findTasksByNameIn(Set<String> tasks);
 
-    Boolean existsByName(String name);
-
 
 }
