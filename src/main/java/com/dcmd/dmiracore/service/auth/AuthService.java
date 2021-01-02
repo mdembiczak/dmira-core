@@ -83,24 +83,26 @@ public class AuthService {
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(userRole);
         } else {
-            strRoles.forEach(role -> {
-                switch (role) {
-                    case "admin":
-                        Role adminRole = roleRepository.findRoleByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(adminRole);
-                        break;
-                    case "owner":
-                        Role ownerRole = roleRepository.findRoleByName(ERole.ROLE_OWNER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(ownerRole);
-                        break;
-                    default:
-                        Role userRole = roleRepository.findRoleByName(ERole.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(userRole);
-                }
-            });
+            strRoles.stream()
+                    .map(String::toLowerCase)
+                    .forEach(role -> {
+                        switch (role) {
+                            case "admin":
+                                Role adminRole = roleRepository.findRoleByName(ERole.ROLE_ADMIN)
+                                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                                roles.add(adminRole);
+                                break;
+                            case "owner":
+                                Role ownerRole = roleRepository.findRoleByName(ERole.ROLE_OWNER)
+                                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                                roles.add(ownerRole);
+                                break;
+                            default:
+                                Role userRole = roleRepository.findRoleByName(ERole.ROLE_USER)
+                                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                                roles.add(userRole);
+                        }
+                    });
         }
 
         User userWithRoles = User.Builder.from(user)

@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Set;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -37,9 +38,9 @@ public class TaskController {
         return taskService.getTaskByName(name);
     }
 
-    @GetMapping("project/{name}")
-    public ResponseEntity<?> getTaskByProjectName(@PathVariable String name) {
-        return taskService.getTaskByProject(name);
+    @GetMapping("project/{projectName}")
+    public ResponseEntity<?> getTaskByProjectName(@PathVariable String projectName) {
+        return taskService.getTaskByProject(projectName);
     }
 
 
@@ -78,5 +79,10 @@ public class TaskController {
     @PutMapping("{name}")
     public ResponseEntity<TaskResponse> updateTaskStatus(@Valid @RequestBody TaskStatusUpdateRequest request, @PathVariable String name) {
         return taskService.updateTaskStatus(request, name);
+    }
+
+    @GetMapping("user/{username}")
+    public ResponseEntity<Set<TaskResponse>> getTaskByAssignedTo(@PathVariable String username) {
+        return taskService.getTaskAssignedToUser(username);
     }
 }
