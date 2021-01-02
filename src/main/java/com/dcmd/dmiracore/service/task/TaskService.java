@@ -140,8 +140,9 @@ public class TaskService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Task updatedTask = Task.Builder.from(task)
-                .state(EState.valueOf(name))
+                .state(EState.valueOf(request.getState()))
                 .build();
+        taskRepository.save(updatedTask);
         TaskResponse taskResponse = taskMapper.mapEntityToResponse(updatedTask);
         return ResponseEntity.ok(taskResponse);
     }
