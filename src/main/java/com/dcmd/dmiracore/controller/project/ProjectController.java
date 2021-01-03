@@ -94,4 +94,9 @@ public class ProjectController {
         MessageResponse messageResponse = projectService.deleteProject(name);
         return ResponseEntity.ok().body(messageResponse);
     }
+
+    @GetMapping(value = "{projectName}/users")
+    public ResponseEntity<?> getUsersFromProject(@PathVariable String projectName) {
+        return projectService.getUsernamesFromProject(projectName);
+    }
 }

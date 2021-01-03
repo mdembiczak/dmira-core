@@ -129,4 +129,13 @@ public class ProjectService {
         projectRepository.delete(project);
         return new MessageResponse(String.format("Project wih name %s is successful removed", name), 201);
     }
+
+    public ResponseEntity<Set<String>> getUsernamesFromProject(String projectName) {
+        Project project = projectRepository.findProjectByName(projectName)
+                .orElseThrow(() -> new RuntimeException("Project no found"));
+        Set<String> usernames = project.getAssignedUsers().stream()
+                .map(User::getUsername)
+                .collect(Collectors.toSet());
+        return ResponseEntity.ok(usernames);
+    }
 }
