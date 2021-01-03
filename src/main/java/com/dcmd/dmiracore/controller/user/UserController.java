@@ -2,6 +2,7 @@ package com.dcmd.dmiracore.controller.user;
 
 import com.dcmd.dmiracore.payload.user.UserResponse;
 import com.dcmd.dmiracore.service.user.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+    @Autowired
     UserService userService;
 
     @GetMapping
