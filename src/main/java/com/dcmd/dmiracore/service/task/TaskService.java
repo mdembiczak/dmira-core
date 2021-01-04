@@ -47,7 +47,7 @@ public class TaskService {
     public ResponseEntity<Set<TaskResponse>> getTaskAssignedToUser(String username) {
         List<Task> tasks = taskRepository.findAll();
         Set<Task> tasksAssignedToUser = tasks.stream()
-                .filter(n -> n.getAssignedTo().getUsername().equals(username))
+                .filter(task -> task.getAssignedTo().getUsername().equals(username))
                 .collect(Collectors.toSet());
         Set<TaskResponse> taskResponses = tasksAssignedToUser.stream()
                 .map(task -> taskMapper.mapEntityToResponse(task))
@@ -70,8 +70,10 @@ public class TaskService {
         return ResponseEntity.ok(taskResponses);
     }
 
-    public ResponseEntity<?> getTaskByName(String name) {
-        Optional<Task> task = taskRepository.findTasksByName(name);
+    public ResponseEntity<?> getTaskByNameAndProject(String name, String projectName) {
+        Optional<Task> task = taskRepository.findTasksByName(name).stream()
+                .filter(taskEntity -> taskEntity.getProject().getName().equals(projectName))
+                .findFirst();
         if (task.isPresent()) {
             TaskResponse taskResponse = taskMapper.mapEntityToResponse(task.get());
             return ResponseEntity.ok(taskResponse);
@@ -107,7 +109,8 @@ public class TaskService {
     }
 
     public ResponseEntity<TaskResponse> updateTask(TaskUpdateRequest request) {
-        Task task = taskRepository.findTasksByName(request.getName())
+        Task task = taskRepository.findTasksByName(request.getName()).stream()
+                .findFirst()
                 .orElseThrow(() -> new RuntimeException(String.format("Task with name %s not found", request.getName())));
 
         User user = userRepository.findUserByUsername(request.getUsername())
@@ -137,7 +140,8 @@ public class TaskService {
     }
 
     public ResponseEntity<TaskResponse> updateTaskStatus(TaskStatusUpdateRequest request, String name) {
-        Task task = taskRepository.findTasksByName(name)
+        Task task = taskRepository.findTasksByName(name).stream()
+                .findFirst()
                 .orElseThrow(() -> new RuntimeException(String.format("Task with name %s not found", name)));
 
         User user = userRepository.findUserByUsername(request.getUsername())
@@ -145,6 +149,7 @@ public class TaskService {
 
         Task updatedTask = Task.Builder.from(task)
                 .state(EState.valueOf(request.getState()))
+                .modifiedBy(user)
                 .build();
         taskRepository.save(updatedTask);
         TaskResponse taskResponse = taskMapper.mapEntityToResponse(updatedTask);
