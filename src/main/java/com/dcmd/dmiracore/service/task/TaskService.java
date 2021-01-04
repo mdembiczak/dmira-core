@@ -15,6 +15,7 @@ import com.dcmd.dmiracore.repository.StateRepository;
 import com.dcmd.dmiracore.repository.TaskRepository;
 import com.dcmd.dmiracore.repository.UserRepository;
 import com.dcmd.dmiracore.service.task.mapper.TaskMapper;
+import com.google.common.base.Strings;
 import io.vavr.control.Either;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -117,13 +118,13 @@ public class TaskService {
                 .modifiedBy(user);
 
 
-        if (!request.getState().isBlank()) {
+        if (!Strings.isNullOrEmpty(request.getState())) {
             State state = stateRepository.findByState(EState.valueOf(request.getState()))
                     .orElseThrow(() -> new RuntimeException("This state does not exists"));
             taskBuilder.state(state.getState());
         }
 
-        if (!request.getAssignedTo().isBlank()) {
+        if (!Strings.isNullOrEmpty(request.getAssignedTo())) {
             User userToAssign = userRepository.findUserByUsername(request.getAssignedTo())
                     .orElseThrow(() -> new RuntimeException("Assigment is not possible. User does not exist"));
             taskBuilder.assignedTo(userToAssign);
