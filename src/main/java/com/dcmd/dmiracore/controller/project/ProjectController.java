@@ -7,6 +7,7 @@ import com.dcmd.dmiracore.payload.project.ProjectResponse;
 import com.dcmd.dmiracore.payload.project.ProjectUpdateRequest;
 import com.dcmd.dmiracore.service.project.ProjectService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -32,10 +33,9 @@ public class ProjectController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Found all projects",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ProjectResponse.class)))
+                            array = @ArraySchema(schema = @Schema(implementation = ProjectResponse.class))))
     })
     @GetMapping
-//    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<Set<ProjectResponse>> getAllProjects() {
         return ResponseEntity.ok(projectService.getAllProjects());
     }
@@ -95,6 +95,13 @@ public class ProjectController {
         return ResponseEntity.ok().body(messageResponse);
     }
 
+
+    @Operation(summary = "Get users from project")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Found users",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = String.class)))),
+    })
     @GetMapping(value = "{projectName}/users")
     public ResponseEntity<?> getUsersFromProject(@PathVariable String projectName) {
         return projectService.getUsernamesFromProject(projectName);
