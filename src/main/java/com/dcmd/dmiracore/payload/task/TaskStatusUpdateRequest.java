@@ -7,6 +7,8 @@ public class TaskStatusUpdateRequest {
     private String username;
     @NotBlank
     private String state;
+    @NotBlank
+    private String projectName;
 
     public String getUsername() {
         return username;
@@ -14,5 +16,9 @@ public class TaskStatusUpdateRequest {
 
     public String getState() {
         return state;
+    }
+
+    public String getProjectName() {
+        return projectName;
     }
 }

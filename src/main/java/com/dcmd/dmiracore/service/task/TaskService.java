@@ -110,6 +110,7 @@ public class TaskService {
 
     public ResponseEntity<TaskResponse> updateTask(TaskUpdateRequest request) {
         Task task = taskRepository.findTasksByName(request.getName()).stream()
+                .filter(taskEntity -> taskEntity.getProject().getName().equals(request.getProjectName()))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException(String.format("Task with name %s not found", request.getName())));
 
@@ -141,6 +142,7 @@ public class TaskService {
 
     public ResponseEntity<TaskResponse> updateTaskStatus(TaskStatusUpdateRequest request, String name) {
         Task task = taskRepository.findTasksByName(name).stream()
+                .filter(taskEntity -> taskEntity.getProject().getName().equals(request.getProjectName()))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException(String.format("Task with name %s not found", name)));
 
